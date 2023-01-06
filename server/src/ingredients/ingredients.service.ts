@@ -1,14 +1,17 @@
 import { Injectable } from "@nestjs/common";
 import { v4 as uuidv4 } from "uuid";
 
-import { Dish } from "./interfaces/dishes.interface";
-import { CreateDishDto, UpdateDishDto } from "./dto/dishes.dto";
+import {
+  CreateIngredientDto,
+  UpdateIngredientDto,
+} from "./dtos/ingredients.dto";
+import { Ingredient } from "./interfaces/ingredients.interface";
 
 @Injectable()
-export class DishesService {
-  private readonly data: Dish[] = [];
+export class IngredientsService {
+  private readonly data: Ingredient[] = [];
 
-  create(toCreate: CreateDishDto) {
+  create(toCreate: CreateIngredientDto) {
     this.data.push({
       id: uuidv4(),
       title: toCreate.title,
@@ -16,15 +19,15 @@ export class DishesService {
     });
   }
 
-  findAll(): Dish[] {
+  findAll(): Ingredient[] {
     return this.data;
   }
 
-  findOne(id: string): Dish | undefined {
+  findOne(id: string): Ingredient | undefined {
     return this.data.find((i) => i.id === id);
   }
 
-  update(id: string, toUpdate: UpdateDishDto): void {
+  update(id: string, toUpdate: UpdateIngredientDto): void {
     const idx = this.data.findIndex((i) => i.id === id);
 
     if (idx) {

@@ -20,22 +20,22 @@ import { JoiValidationPipe } from "../pipes/validation.pipe";
 
 @Controller("dishes")
 export class DishesController {
-  constructor(private dishesSvc: DishesService) {}
+  constructor(private svc: DishesService) {}
 
   @Post()
   @UsePipes(new JoiValidationPipe(CreateDishSchema))
   async create(@Body() createDishDto: CreateDishDto): Promise<void> {
-    this.dishesSvc.create(createDishDto);
+    this.svc.create(createDishDto);
   }
 
   @Get()
   async findAll(): Promise<Dish[]> {
-    return this.dishesSvc.findAll();
+    return this.svc.findAll();
   }
 
   @Get(":id")
   async findOne(@Param("id") id: string): Promise<Dish | undefined> {
-    return this.dishesSvc.findOne(id);
+    return this.svc.findOne(id);
   }
 
   @Put(":id")
@@ -43,7 +43,7 @@ export class DishesController {
     @Param("id") id: string,
     @Body() updateDishDto: UpdateDishDto,
   ): Promise<void> {
-    return this.dishesSvc.update(id, updateDishDto);
+    return this.svc.update(id, updateDishDto);
   }
 
   @Delete(":id")

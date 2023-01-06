@@ -7,6 +7,7 @@ import { DishesModule } from "./dishes/dishes.module";
 import { logger } from "./middleware/logger.middleware";
 import { DishesController } from "./dishes/dishes.controller";
 import { DishesService } from "./dishes/dishes.service";
+import { IngredientsModule } from "./ingredients/ingredients.module";
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { DishesService } from "./dishes/dishes.service";
       }`,
     }),
     DishesModule,
+    IngredientsModule,
   ],
   controllers: [AppController, DishesController],
   providers: [AppService, DishesService],
