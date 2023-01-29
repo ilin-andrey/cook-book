@@ -1,9 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 
-import { DishesController } from "~/components/dishes/dishes.controller";
 import { DishesModule } from "~/components/dishes/dishes.module";
-import { DishesService } from "~/components/dishes/dishes.service";
 import { IngredientsModule } from "~/components/ingredients/ingredients.module";
 import { RecipesModule } from "~/components/recipes/recipes.module";
 import { logger } from "~/middleware/logger.middleware";
@@ -23,8 +21,8 @@ import { AppService } from "./app.service";
     IngredientsModule,
     RecipesModule,
   ],
-  controllers: [AppController, DishesController],
-  providers: [AppService, DishesService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
