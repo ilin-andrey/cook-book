@@ -19,7 +19,8 @@
     "baseUrl": "./",
     "paths": {
       "~/middleware/*": ["src/middleware/*"],
-      "~/pipes/*": ["src/pipes/*"]
+      "~/pipes/*": ["src/pipes/*"],
+      "~/components/*": ["src/components/*"]
     }
   }
 }
