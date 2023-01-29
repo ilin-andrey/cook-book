@@ -9,7 +9,8 @@ import {
   UsePipes,
 } from "@nestjs/common";
 
-import { JoiValidationPipe } from "src/pipes/validation.pipe";
+import { JoiValidationPipe } from "~/pipes/validation.pipe";
+
 import {
   CreateIngredientDto,
   CreateIngredientSchema,

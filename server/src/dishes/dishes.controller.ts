@@ -9,6 +9,8 @@ import {
   UsePipes,
 } from "@nestjs/common";
 
+import { JoiValidationPipe } from "~/pipes/validation.pipe";
+
 import { Dish } from "./interfaces/dishes.interface";
 import {
   CreateDishDto,
@@ -16,7 +18,6 @@ import {
   UpdateDishDto,
 } from "./dto/dishes.dto";
 import { DishesService } from "./dishes.service";
-import { JoiValidationPipe } from "../pipes/validation.pipe";
 
 @Controller("dishes")
 export class DishesController {

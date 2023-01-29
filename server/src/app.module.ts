@@ -1,10 +1,11 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 
+import { logger } from "~/middleware/logger.middleware";
+
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { DishesModule } from "./dishes/dishes.module";
-import { logger } from "./middleware/logger.middleware";
 import { DishesController } from "./dishes/dishes.controller";
 import { DishesService } from "./dishes/dishes.service";
 import { IngredientsModule } from "./ingredients/ingredients.module";
