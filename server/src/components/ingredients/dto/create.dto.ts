@@ -6,8 +6,6 @@ export class CreateIngredientDto {
   public imageUrl: string;
 }
 
-export class UpdateIngredientDto extends CreateIngredientDto {}
-
 export const CreateIngredientSchema = Joi.object({
   title: Joi.string().required(),
   description: Joi.string().empty(""),

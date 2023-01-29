@@ -11,13 +11,10 @@ import {
 
 import { JoiValidationPipe } from "~/pipes/validation.pipe";
 
-import { Dish } from "./interfaces/dishes.interface";
-import {
-  CreateDishDto,
-  CreateDishSchema,
-  UpdateDishDto,
-} from "./dto/dishes.dto";
 import { DishesService } from "./dishes.service";
+import { CreateDishDto, CreateDishSchema } from "./dto/create.dto";
+import { UpdateDishDto, UpdateDishSchema } from "./dto/update.dto";
+import { Dish } from "./interfaces/dishes.interface";
 
 @Controller("dishes")
 export class DishesController {
@@ -40,6 +37,7 @@ export class DishesController {
   }
 
   @Put(":id")
+  @UsePipes(new JoiValidationPipe(UpdateDishSchema))
   async update(
     @Param("id") id: string,
     @Body() updateDishDto: UpdateDishDto,
@@ -49,6 +47,6 @@ export class DishesController {
 
   @Delete(":id")
   async remove(@Param("id") id: string): Promise<void> {
-    return this.svc.delete(id);
+    return this.svc.remove(id);
   }
 }

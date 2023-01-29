@@ -11,11 +11,8 @@ import {
 
 import { JoiValidationPipe } from "~/pipes/validation.pipe";
 
-import {
-  CreateIngredientDto,
-  CreateIngredientSchema,
-  UpdateIngredientDto,
-} from "./dtos/ingredients.dto";
+import { CreateIngredientDto, CreateIngredientSchema } from "./dto/create.dto";
+import { UpdateIngredientDto, UpdateIngredientSchema } from "./dto/update.dto";
 import { IngredientsService } from "./ingredients.service";
 import { Ingredient } from "./interfaces/ingredients.interface";
 
@@ -42,6 +39,7 @@ export class IngredientsController {
   }
 
   @Put(":id")
+  @UsePipes(new JoiValidationPipe(UpdateIngredientSchema))
   async update(
     @Param("id") id: string,
     @Body() updateIngredientDto: UpdateIngredientDto,

@@ -1,8 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { v4 as uuidv4 } from "uuid";
 
+import { CreateDishDto } from "./dto/create.dto";
+import { UpdateDishDto } from "./dto/update.dto";
 import { Dish } from "./interfaces/dishes.interface";
-import { CreateDishDto, UpdateDishDto } from "./dto/dishes.dto";
 
 @Injectable()
 export class DishesService {
@@ -35,7 +36,7 @@ export class DishesService {
     }
   }
 
-  delete(id: string): void {
+  remove(id: string): void {
     const idx = this.data.findIndex((i) => i.id === id);
     this.data.splice(idx, 1);
   }
