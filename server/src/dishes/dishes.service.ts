@@ -34,4 +34,9 @@ export class DishesService {
       this.data[idx] = { ...this.data[idx], ...toUpdate };
     }
   }
+
+  delete(id: string): void {
+    const idx = this.data.findIndex((i) => i.id === id);
+    this.data.splice(idx, 1);
+  }
 }

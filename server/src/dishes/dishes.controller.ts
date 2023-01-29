@@ -48,7 +48,7 @@ export class DishesController {
   }
 
   @Delete(":id")
-  async remove(@Param("id") id: string) {
-    return `This action removes a #${id} dish`;
+  async remove(@Param("id") id: string): Promise<void> {
+    return this.svc.delete(id);
   }
 }
