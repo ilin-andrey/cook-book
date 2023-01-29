@@ -13,6 +13,9 @@ export class DishesService {
       id: uuidv4(),
       title: toCreate.title,
       description: toCreate.description,
+      duration: toCreate.duration,
+      complexity: toCreate.complexity,
+      imageUrl: toCreate.imageUrl,
     });
   }
 
