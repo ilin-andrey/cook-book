@@ -20,7 +20,7 @@
     "paths": {
       "~/middleware/*": ["src/middleware/*"],
       "~/pipes/*": ["src/pipes/*"],
-      "~/components/*": ["src/components/*"]
+      "~/resources/*": ["src/resources/*"]
     }
   }
 }
