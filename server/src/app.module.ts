@@ -5,6 +5,7 @@ import { DishesController } from "~/components/dishes/dishes.controller";
 import { DishesModule } from "~/components/dishes/dishes.module";
 import { DishesService } from "~/components/dishes/dishes.service";
 import { IngredientsModule } from "~/components/ingredients/ingredients.module";
+import { RecipesModule } from "~/components/recipes/recipes.module";
 import { logger } from "~/middleware/logger.middleware";
 
 import { AppController } from "./app.controller";
@@ -20,6 +21,7 @@ import { AppService } from "./app.service";
     }),
     DishesModule,
     IngredientsModule,
+    RecipesModule,
   ],
   controllers: [AppController, DishesController],
   providers: [AppService, DishesService],
