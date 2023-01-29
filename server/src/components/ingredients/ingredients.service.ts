@@ -16,6 +16,7 @@ export class IngredientsService {
       id: uuidv4(),
       title: toCreate.title,
       description: toCreate.description,
+      imageUrl: toCreate.imageUrl,
     });
   }
 
@@ -33,5 +34,10 @@ export class IngredientsService {
     if (idx) {
       this.data[idx] = { ...this.data[idx], ...toUpdate };
     }
+  }
+
+  delete(id: string): void {
+    const idx = this.data.findIndex((i) => i.id === id);
+    this.data.splice(idx, 1);
   }
 }

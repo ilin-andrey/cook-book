@@ -3,6 +3,6 @@ export interface Dish {
   title: string;
   description: string;
   duration: number; // in seconds
-  complexity: number;
-  imageUrl: string | null;
+  complexity: number; // from 1 to 5
+  imageUrl: string;
 }
