@@ -8,6 +8,7 @@ import {
   Put,
   UsePipes,
 } from "@nestjs/common";
+
 import { JoiValidationPipe } from "~/pipes/validation.pipe";
 
 import { CreateRecipeDto, CreateRecipeSchema } from "./dto/create-recipe.dto";
@@ -21,27 +22,36 @@ export class RecipesController {
   @Post()
   @UsePipes(new JoiValidationPipe(CreateRecipeSchema))
   create(@Body() createRecipeDto: CreateRecipeDto) {
-    return this.svc.create(createRecipeDto);
+    const data = this.svc.create(createRecipeDto);
+    return { success: true, data };
   }
 
   @Get()
   findAll() {
-    return this.svc.findAll();
+    return {
+      success: true,
+      data: this.svc.findAll(),
+    };
   }
 
   @Get(":id")
   findOne(@Param("id") id: string) {
-    return this.svc.findOne(id);
+    return {
+      success: true,
+      data: this.svc.findOne(id),
+    };
   }
 
   @Put(":id")
   @UsePipes(new JoiValidationPipe(UpdateRecipeSchema))
   update(@Param("id") id: string, @Body() updateRecipeDto: UpdateRecipeDto) {
-    return this.svc.update(id, updateRecipeDto);
+    const data = this.svc.update(id, updateRecipeDto);
+    return { success: true, data };
   }
 
   @Delete(":id")
   remove(@Param("id") id: string) {
-    return this.svc.remove(id);
+    this.svc.remove(id);
+    return { success: true };
   }
 }

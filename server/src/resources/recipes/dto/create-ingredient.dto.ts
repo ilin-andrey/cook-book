@@ -1,9 +1,8 @@
 import * as Joi from "joi";
 
-import { BaseUnits } from "../interfaces/ingredient.interface";
+import { BaseUnits } from "~/resources/recipes/interfaces/ingredient.interface";
 
 export class CreateRecipeIngredientDto {
-  public id: string;
   public ingredientId: string;
   public amount: number;
   public units: BaseUnits;

@@ -7,7 +7,7 @@ import {
 
 export class CreateRecipeDto {
   public dishId: string;
-  public ingredients: CreateRecipeIngredientDto[];
+  public ingredients: Array<CreateRecipeIngredientDto>;
 }
 
 export const CreateRecipeSchema = Joi.object({
@@ -16,5 +16,5 @@ export const CreateRecipeSchema = Joi.object({
       version: ["uuidv4"],
     })
     .required(),
-  ingredients: CreateRecipeIngredientSchema,
+  ingredients: Joi.array().items(CreateRecipeIngredientSchema),
 });

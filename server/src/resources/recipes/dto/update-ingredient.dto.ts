@@ -1,14 +1,19 @@
-import { PartialType } from "@nestjs/mapped-types";
 import * as Joi from "joi";
 
-import { BaseUnits } from "../interfaces/ingredient.interface";
+import { BaseUnits } from "~/resources/recipes/interfaces/ingredient.interface";
+
 import { CreateRecipeIngredientDto } from "./create-ingredient.dto";
 
-export class UpdateRecipeIngredientDto extends PartialType(
-  CreateRecipeIngredientDto,
-) {}
+export class UpdateRecipeIngredientDto extends CreateRecipeIngredientDto {
+  id: string;
+}
 
 export const UpdateRecipeIngredientSchema = Joi.object({
+  id: Joi.string()
+    .guid({
+      version: ["uuidv4"],
+    })
+    .required(),
   amount: Joi.number().positive(),
   units: Joi.string().valid(...Object.values(BaseUnits)),
 });

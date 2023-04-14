@@ -1,6 +1,6 @@
 import * as Joi from "joi";
 
-export class CreateDishDto {
+export class CreateDto {
   public title: string;
   public description: string;
   public duration: number;
@@ -8,7 +8,7 @@ export class CreateDishDto {
   public imageUrl: string;
 }
 
-export const CreateDishSchema = Joi.object({
+export const CreateSchema = Joi.object({
   title: Joi.string().required(),
   description: Joi.string().empty(""),
   duration: Joi.number().integer().positive().required(),

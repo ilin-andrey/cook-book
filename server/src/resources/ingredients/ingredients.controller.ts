@@ -11,44 +11,52 @@ import {
 
 import { JoiValidationPipe } from "~/pipes/validation.pipe";
 
-import { CreateIngredientDto, CreateIngredientSchema } from "./dto/create.dto";
-import { UpdateIngredientDto, UpdateIngredientSchema } from "./dto/update.dto";
+import { CreateDto, CreateSchema } from "./dto/create.dto";
+import { UpdateDto, UpdateSchema } from "./dto/update.dto";
 import { IngredientsService } from "./ingredients.service";
-import { Ingredient } from "./interfaces/ingredients.interface";
 
 @Controller("ingredients")
 export class IngredientsController {
   constructor(private svc: IngredientsService) {}
 
   @Post()
-  @UsePipes(new JoiValidationPipe(CreateIngredientSchema))
-  async create(
-    @Body() createIngredientDto: CreateIngredientDto,
-  ): Promise<void> {
-    this.svc.create(createIngredientDto);
+  @UsePipes(new JoiValidationPipe(CreateSchema))
+  async create(@Body() createIngredientDto: CreateDto) {
+    const data = this.svc.create(createIngredientDto);
+    return { success: true, data };
   }
 
   @Get()
-  async findAll(): Promise<Ingredient[]> {
-    return this.svc.findAll();
+  async findAll() {
+    const data = this.svc.findAll();
+    return {
+      success: true,
+      data,
+    };
   }
 
   @Get(":id")
-  async findOne(@Param("id") id: string): Promise<Ingredient | undefined> {
-    return this.svc.findOne(id);
+  async findOne(@Param("id") id: string) {
+    const data = this.svc.findOne(id);
+    return {
+      success: true,
+      data,
+    };
   }
 
   @Put(":id")
-  @UsePipes(new JoiValidationPipe(UpdateIngredientSchema))
+  @UsePipes(new JoiValidationPipe(UpdateSchema))
   async update(
     @Param("id") id: string,
-    @Body() updateIngredientDto: UpdateIngredientDto,
-  ): Promise<void> {
-    return this.svc.update(id, updateIngredientDto);
+    @Body() updateIngredientDto: UpdateDto,
+  ) {
+    const data = this.svc.update(id, updateIngredientDto);
+    return { success: true, data };
   }
 
   @Delete(":id")
   async remove(@Param("id") id: string) {
-    return `This action removes a #${id} dish`;
+    this.svc.remove(id);
+    return { success: true };
   }
 }

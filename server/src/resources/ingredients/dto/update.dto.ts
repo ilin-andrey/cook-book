@@ -1,11 +1,11 @@
 import { PartialType } from "@nestjs/mapped-types";
 import * as Joi from "joi";
 
-import { CreateIngredientDto } from "./create.dto";
+import { CreateDto } from "./create.dto";
 
-export class UpdateIngredientDto extends PartialType(CreateIngredientDto) {}
+export class UpdateDto extends PartialType(CreateDto) {}
 
-export const UpdateIngredientSchema = Joi.object({
+export const UpdateSchema = Joi.object({
   title: Joi.string(),
   description: Joi.string().empty(""),
   imageUrl: Joi.string().empty(""),

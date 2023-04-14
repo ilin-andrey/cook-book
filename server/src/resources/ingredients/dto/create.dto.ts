@@ -1,12 +1,12 @@
 import * as Joi from "joi";
 
-export class CreateIngredientDto {
+export class CreateDto {
   public title: string;
   public description: string;
   public imageUrl: string;
 }
 
-export const CreateIngredientSchema = Joi.object({
+export const CreateSchema = Joi.object({
   title: Joi.string().required(),
   description: Joi.string().empty(""),
   imageUrl: Joi.string().empty(""),
