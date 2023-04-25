@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Dish {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  imageUrl    String?   @map("image_url")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  Recipe      Recipe[]
+
+  @@map("dish")
+}
+
+model Ingredient {
+  id                  Int                   @id @default(autoincrement())
+  title               String
+  description         String
+  imageUrl            String?               @map("image_url")
+  createdAt           DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime?             @updatedAt @map("updated_at") @db.Timestamptz(6)
+  IngredientsOnRecipe IngredientsOnRecipe[]
+
+  @@map("ingredient")
+}
+
+model Recipe {
+  id                  Int                   @id @default(autoincrement())
+  duration            Int
+  complexity          Int
+  description         String
+  createdAt           DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime?             @updatedAt @map("updated_at") @db.Timestamptz(6)
+  dishId              Int                   @map("dish_id")
+  Dish                Dish                  @relation(fields: [dishId], references: [id])
+  IngredientsOnRecipe IngredientsOnRecipe[]
+
+  @@map("recipe")
+}
+
+model IngredientsOnRecipe {
+  recipeId     Int        @map("recipe_id")
+  recipe       Recipe     @relation(fields: [recipeId], references: [id])
+  ingredientId Int        @map("ingredient_id")
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  size         Int
+  units        String
+
+  @@id([recipeId, ingredientId])
+  @@map("m2m_ingredients_on_recipes")
+}
