@@ -1,47 +1,40 @@
 import { Injectable } from "@nestjs/common";
-import { v4 as uuidv4 } from "uuid";
+import { Dish, Prisma } from "@prisma/client";
 
-import { CreateDto } from "./dto/create.dto";
-import { UpdateDto } from "./dto/update.dto";
-import { Dish } from "./interfaces/dishes.interface";
+import { PrismaService } from "~/prisma.service";
 
 @Injectable()
 export class DishesService {
-  private readonly data: Dish[] = [];
+  constructor(private prisma: PrismaService) {}
 
-  create(toCreate: CreateDto): Dish {
-    const newObj = {
-      id: uuidv4(),
-      title: toCreate.title,
-      description: toCreate.description,
-      duration: toCreate.duration,
-      complexity: toCreate.complexity,
-      imageUrl: toCreate.imageUrl,
-    };
-    this.data.push(newObj);
-
-    return newObj;
+  async create(data: Prisma.DishCreateInput): Promise<Dish> {
+    return this.prisma.dish.create({
+      data,
+    });
   }
 
-  findAll(): Dish[] {
-    return this.data;
+  async findAll(): Promise<Dish[]> {
+    return this.prisma.dish.findMany();
   }
 
-  findOne(id: string): Dish | undefined {
-    return this.data.find((i) => i.id === id);
+  async findOne(id: number): Promise<Dish | null> {
+    return this.prisma.dish.findFirst({ where: { id } });
   }
 
-  update(id: string, toUpdate: UpdateDto): Dish | undefined {
-    const idx = this.data.findIndex((i) => i.id === id);
-
-    if (idx) {
-      this.data[idx] = { ...this.data[idx], ...toUpdate };
-      return this.data[idx];
-    }
+  async update(params: {
+    where: Prisma.DishWhereUniqueInput;
+    data: Prisma.DishUpdateInput;
+  }): Promise<Dish> {
+    const { data, where } = params;
+    return this.prisma.dish.update({
+      data: { ...data, updatedAt: new Date() },
+      where,
+    });
   }
 
-  remove(id: string): void {
-    const idx = this.data.findIndex((i) => i.id === id);
-    this.data.splice(idx, 1);
+  async remove(where: Prisma.DishWhereUniqueInput): Promise<Dish> {
+    return this.prisma.dish.delete({
+      where,
+    });
   }
 }

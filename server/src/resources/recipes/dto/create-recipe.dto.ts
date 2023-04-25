@@ -1,13 +1,10 @@
 import * as Joi from "joi";
 
-import {
-  CreateRecipeIngredientDto,
-  CreateRecipeIngredientSchema,
-} from "./create-ingredient.dto";
-
 export class CreateRecipeDto {
-  public dishId: string;
-  public ingredients: Array<CreateRecipeIngredientDto>;
+  public duration: number;
+  public complexity: number;
+  public description: string;
+  public dishId: number;
 }
 
 export const CreateRecipeSchema = Joi.object({
@@ -16,5 +13,7 @@ export const CreateRecipeSchema = Joi.object({
       version: ["uuidv4"],
     })
     .required(),
-  ingredients: Joi.array().items(CreateRecipeIngredientSchema),
+  duration: Joi.number().integer().positive().required(),
+  complexity: Joi.number().integer().min(1).max(5).required(),
+  description: Joi.string().empty(""),
 });

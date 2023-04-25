@@ -1,44 +1,49 @@
 import { Injectable } from "@nestjs/common";
-import { v4 as uuidv4 } from "uuid";
+import { Prisma, Recipe } from "@prisma/client";
+
+import { PrismaService } from "~/prisma.service";
 
 import { CreateRecipeDto } from "./dto/create-recipe.dto";
-import { UpdateRecipeDto } from "./dto/update-recipe.dto";
-import { Recipe } from "./interfaces/recipe.interface";
 
 @Injectable()
 export class RecipesService {
-  private readonly data: Recipe[] = [];
+  constructor(private prisma: PrismaService) {}
 
-  create(toCreate: CreateRecipeDto): Recipe {
-    const newObj = {
-      id: uuidv4(),
-      dishId: toCreate.dishId,
-      ingredients: toCreate.ingredients.map((i) => ({ id: uuidv4(), ...i })),
-    };
-    this.data.push(newObj);
-
-    return newObj;
+  // FIXME
+  async create(data: CreateRecipeDto): Promise<Recipe> {
+    const { dishId, ...rest } = data;
+    return this.prisma.recipe.create({
+      data: {
+        ...rest,
+        Dish: {
+          connect: { id: dishId },
+        },
+      },
+    });
   }
 
-  findAll(): Recipe[] {
-    return this.data;
+  async findAll(): Promise<Recipe[]> {
+    return this.prisma.recipe.findMany();
   }
 
-  findOne(id: string): Recipe | undefined {
-    return this.data.find((i) => i.id === id);
+  async findOne(id: number): Promise<Recipe | null> {
+    return this.prisma.recipe.findFirst({ where: { id } });
   }
 
-  update(id: string, toUpdate: UpdateRecipeDto): Recipe | undefined {
-    const idx = this.data.findIndex((i) => i.id === id);
-
-    if (idx) {
-      this.data[idx] = { ...this.data[idx], ...toUpdate };
-      return this.data[idx];
-    }
+  async update(params: {
+    where: Prisma.RecipeWhereUniqueInput;
+    data: Prisma.RecipeUpdateInput;
+  }): Promise<Recipe> {
+    const { data, where } = params;
+    return this.prisma.recipe.update({
+      data: { ...data, updatedAt: new Date() },
+      where,
+    });
   }
 
-  remove(id: string): void {
-    const idx = this.data.findIndex((i) => i.id === id);
-    this.data.splice(idx, 1);
+  async remove(where: Prisma.RecipeWhereUniqueInput): Promise<Recipe> {
+    return this.prisma.recipe.delete({
+      where,
+    });
   }
 }

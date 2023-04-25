@@ -22,13 +22,13 @@ export class DishesController {
   @Post()
   @UsePipes(new JoiValidationPipe(CreateSchema))
   async create(@Body() createDishDto: CreateDto) {
-    const data = this.svc.create(createDishDto);
+    const data = await this.svc.create(createDishDto);
     return { success: true, data };
   }
 
   @Get()
   async findAll() {
-    const data = this.svc.findAll();
+    const data = await this.svc.findAll();
     return {
       success: true,
       data,
@@ -36,8 +36,8 @@ export class DishesController {
   }
 
   @Get(":id")
-  async findOne(@Param("id") id: string) {
-    const data = this.svc.findOne(id);
+  async findOne(@Param("id") id: number) {
+    const data = await this.svc.findOne(id);
     return {
       success: true,
       data,
@@ -46,14 +46,14 @@ export class DishesController {
 
   @Put(":id")
   @UsePipes(new JoiValidationPipe(UpdateSchema))
-  async update(@Param("id") id: string, @Body() updateDishDto: UpdateDto) {
-    const data = this.svc.update(id, updateDishDto);
-    return { success: true, data };
+  async update(@Param("id") id: number, @Body() data: UpdateDto) {
+    const ret = await this.svc.update({ where: { id }, data });
+    return { success: true, data: ret };
   }
 
   @Delete(":id")
-  async remove(@Param("id") id: string) {
-    this.svc.remove(id);
+  async remove(@Param("id") id: number) {
+    await this.svc.remove({ id });
     return { success: true };
   }
 }

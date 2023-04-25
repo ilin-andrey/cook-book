@@ -21,37 +21,39 @@ export class RecipesController {
 
   @Post()
   @UsePipes(new JoiValidationPipe(CreateRecipeSchema))
-  create(@Body() createRecipeDto: CreateRecipeDto) {
-    const data = this.svc.create(createRecipeDto);
-    return { success: true, data };
+  async create(@Body() data: CreateRecipeDto) {
+    const ret = await this.svc.create(data);
+    return { success: true, data: ret };
   }
 
   @Get()
-  findAll() {
+  async findAll() {
+    const data = await this.svc.findAll();
     return {
       success: true,
-      data: this.svc.findAll(),
+      data,
     };
   }
 
   @Get(":id")
-  findOne(@Param("id") id: string) {
+  async findOne(@Param("id") id: number) {
+    const data = await this.svc.findOne(id);
     return {
       success: true,
-      data: this.svc.findOne(id),
+      data,
     };
   }
 
   @Put(":id")
   @UsePipes(new JoiValidationPipe(UpdateRecipeSchema))
-  update(@Param("id") id: string, @Body() updateRecipeDto: UpdateRecipeDto) {
-    const data = this.svc.update(id, updateRecipeDto);
-    return { success: true, data };
+  async update(@Param("id") id: number, @Body() data: UpdateRecipeDto) {
+    const ret = await this.svc.update({ where: { id }, data });
+    return { success: true, data: ret };
   }
 
   @Delete(":id")
-  remove(@Param("id") id: string) {
-    this.svc.remove(id);
+  async remove(@Param("id") id: number) {
+    await this.svc.remove({ id });
     return { success: true };
   }
 }
