@@ -7,8 +7,6 @@ import { CreateResponse, URL, useDishes } from "~/core/hooks/useDishes";
 const testDish = {
   title: "test",
   description: "",
-  duration: 500,
-  complexity: 5,
   imageUrl: "",
 };
 
