@@ -1,4 +1,5 @@
-import { Inter } from "@next/font/google";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 
 import { Content } from "~/components/Content";
 import { Footer } from "~/components/Footer";
@@ -23,11 +24,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.className}>
-      {/*
-        <head /> will contain the components returned by the nearest parent
-        head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
-      <head />
       <body>
         <div className="flex flex-col min-h-screen">
           <Header items={NAVIGATION} />
@@ -38,3 +34,13 @@ export default function RootLayout({
     </html>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Cook Book",
+  description: "Cook Book",
+  icons: "/favicon.ico",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+  },
+};
