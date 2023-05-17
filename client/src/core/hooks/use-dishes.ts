@@ -3,9 +3,9 @@ import useSWRImmutable from "swr/immutable";
 import { fetcher } from "~/core/api/fetcher";
 import { ROUTES } from "~/core/routes";
 
-export const URL = `${process.env.NEXT_PUBLIC_API_URL}${ROUTES.INGREDIENTS}`;
+export const URL = `${process.env.NEXT_PUBLIC_API_URL}${ROUTES.DISHES}`;
 
-type Ingredient = {
+export type Dish = {
   id: string;
   title: string;
   description: string;
@@ -14,14 +14,14 @@ type Ingredient = {
 
 type Response = {
   success: boolean;
-  data: Array<Ingredient>;
+  data: Array<Dish>;
 };
 
 export type CreateResponse = {
   success: boolean;
-  data: Ingredient;
+  data: Dish;
 };
 
-export function useIngredients() {
+export function useDishes() {
   return useSWRImmutable<Response>(URL, fetcher);
 }

@@ -46,3 +46,12 @@ nav {
   padding: 1rem;
   list-style: none;
 }
+
+input,
+textarea {
+  padding: 0 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  border-width: 1px;
+  outline: 2px solid transparent;
+}

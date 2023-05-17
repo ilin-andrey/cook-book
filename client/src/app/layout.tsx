@@ -3,16 +3,17 @@ import { Inter } from "@next/font/google";
 import { Content } from "~/components/Content";
 import { Footer } from "~/components/Footer";
 import { Header } from "~/components/Header";
+import { ROUTES } from "~/core/routes";
 
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const navigation = [
-  { name: "Home", href: "/" },
-  { name: "Dishes", href: "/dishes" },
-  { name: "Ingredients", href: "/ingredients" },
-  { name: "Recipes", href: "/recipes" },
+const NAVIGATION = [
+  { name: "Home", href: ROUTES.ROOT },
+  { name: "Dishes", href: ROUTES.DISHES },
+  { name: "Ingredients", href: ROUTES.INGREDIENTS },
+  { name: "Recipes", href: ROUTES.RECIPES },
 ];
 
 export default function RootLayout({
@@ -29,7 +30,7 @@ export default function RootLayout({
       <head />
       <body>
         <div className="flex flex-col min-h-screen">
-          <Header items={navigation} />
+          <Header items={NAVIGATION} />
           <Content>{children}</Content>
           <Footer />
         </div>

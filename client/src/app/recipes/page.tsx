@@ -5,9 +5,9 @@ import * as R from "rambda";
 import { Button } from "~/components/atoms/Button";
 import { Select } from "~/components/atoms/Select";
 import { postRequest } from "~/core/api/fetcher";
-import { useDishes } from "~/core/hooks/useDishes";
-import { useIngredients } from "~/core/hooks/useIngredients";
-import { CreateResponse, URL, useRecipes } from "~/core/hooks/useRecipes";
+import { useDishes } from "~/core/hooks/use-dishes";
+import { useIngredients } from "~/core/hooks/use-ingredients";
+import { CreateResponse, URL, useRecipes } from "~/core/hooks/use-recipes";
 
 export default function Recipes() {
   const { data: dishes, isLoading: dichesLoading } = useDishes();
