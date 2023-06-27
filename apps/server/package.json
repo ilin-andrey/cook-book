@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "cook-book-server",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -19,7 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./tests/jest-e2e.json",
-    "prettier": "prettier --write .",
+    "typecheck": "tsc --noEmit",
     "postinstall": "prisma generate"
   },
   "dependencies": {

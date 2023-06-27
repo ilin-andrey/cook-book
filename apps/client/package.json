@@ -1,12 +1,13 @@
 {
-  "name": "cook-book",
+  "name": "cook-book-client",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "PORT=3001 next dev --turbo",
+    "dev": "PORT=3001 next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@types/node": "20.1.7",
