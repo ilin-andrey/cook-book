@@ -9,7 +9,6 @@ import { CreateRecipeDto } from "./dto/create-recipe.dto";
 export class RecipesService {
   constructor(private prisma: PrismaService) {}
 
-  // FIXME
   async create(data: CreateRecipeDto): Promise<Recipe> {
     const { dishId, ...rest } = data;
     return this.prisma.recipe.create({
