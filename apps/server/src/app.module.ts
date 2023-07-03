@@ -13,9 +13,7 @@ import { AppService } from "./app.service";
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `config/.env.${
-        process.env.NODE_ENV ? process.env.NODE_ENV : "local"
-      }`,
+      envFilePath: ".env",
     }),
     DishesModule,
     IngredientsModule,
