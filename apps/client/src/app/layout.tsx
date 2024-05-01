@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 
 import { Content } from "~/components/Content";
@@ -39,8 +39,9 @@ export const metadata: Metadata = {
   title: "Cook Book",
   description: "Cook Book",
   icons: "/favicon.ico",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-  },
 };
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+} 
