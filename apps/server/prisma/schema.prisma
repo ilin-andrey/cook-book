@@ -11,6 +11,23 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+}
+
+enum Units {
+  GRAMM
+  KILOGRAMM
+  MILLILITER
+  LITER
+  PIECE
+  TEASPOON
+  TABLESPOON
+}
+
 model User {
   id        Int       @id @default(autoincrement())
   name      String
@@ -18,7 +35,8 @@ model User {
   password  String
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  Session   Session[]
+
+  Session Session[]
 
   @@map("user")
 }
@@ -29,44 +47,51 @@ model Session {
   refreshTokenHash String    @map("refresh_token_hash")
   createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt        DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  UserId           User      @relation(fields: [userId], references: [id])
+
+  UserId User @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@map("session")
 }
 
 model Dish {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  imageUrl    String?    @map("image_url")
+  mealTypes   MealType[] @map("meal_types")
+  createdAt   DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime?  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  Recipe Recipe[]
+
+  @@map("dish")
+}
+
+model Ingredient {
   id          Int       @id @default(autoincrement())
   title       String
   description String
   imageUrl    String?   @map("image_url")
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  Recipe      Recipe[]
 
-  @@map("dish")
-}
-
-model Ingredient {
-  id                  Int                   @id @default(autoincrement())
-  title               String
-  description         String
-  imageUrl            String?               @map("image_url")
-  createdAt           DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt           DateTime?             @updatedAt @map("updated_at") @db.Timestamptz(6)
   IngredientsOnRecipe IngredientsOnRecipe[]
 
   @@map("ingredient")
 }
 
 model Recipe {
-  id                  Int                   @id @default(autoincrement())
-  duration            Int
-  complexity          Int
-  description         String
-  createdAt           DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt           DateTime?             @updatedAt @map("updated_at") @db.Timestamptz(6)
-  dishId              Int                   @map("dish_id")
+  id          Int       @id @default(autoincrement())
+  duration    Int
+  complexity  Int
+  portions    Int       @default(1)
+  calories    Int
+  description String
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  dishId      Int       @map("dish_id")
+
   Dish                Dish                  @relation(fields: [dishId], references: [id])
   IngredientsOnRecipe IngredientsOnRecipe[]
 
@@ -74,12 +99,13 @@ model Recipe {
 }
 
 model IngredientsOnRecipe {
-  recipeId     Int        @map("recipe_id")
-  recipe       Recipe     @relation(fields: [recipeId], references: [id])
-  ingredientId Int        @map("ingredient_id")
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
-  size         Int
-  units        String
+  recipeId     Int   @map("recipe_id")
+  ingredientId Int   @map("ingredient_id")
+  size         Float
+  units        Units
+
+  recipe     Recipe     @relation(fields: [recipeId], references: [id])
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
 
   @@id([recipeId, ingredientId])
   @@map("m2m_ingredients_on_recipes")

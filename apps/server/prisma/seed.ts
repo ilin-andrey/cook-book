@@ -4,26 +4,14 @@ const prisma = new PrismaClient();
 
 async function main() {
   const dishNames = [
-    "Spaghetti Bolognese",
-    "Chicken Parmesan",
-    "Caesar Salad",
-    "Margherita Pizza",
-    "Mushroom Risotto",
-    "Lobster Bisque",
-    "Grilled Cheese Sandwich",
-    "Chicken Alfredo",
-    "Beef Tacos",
-    "Shrimp Scampi",
-    "Clam Chowder",
-    "Chicken Marsala",
-    "Beef Stroganoff",
-    "Fish and Chips",
-    "Chicken Piccata",
-    "Pulled Pork Sandwich",
-    "Chicken Enchiladas",
-    "Beef Burritos",
-    "Chicken and Waffles",
-    "Lamb Gyros",
+    "borscht",
+    "shchi",
+    "goulash soup",
+    "pumpkin puree soup",
+    "tom yum",
+    "zucchini puree soup",
+    "chicken soup with cheese",
+    "mushroom puree soup",
   ];
 
   for (let i = 0; i < dishNames.length; i++) {
@@ -34,6 +22,7 @@ async function main() {
         id: i,
         title: dishNames[i],
         description: "Description for " + dishNames[i],
+        mealTypes: ["LUNCH", "DINNER"],
       },
     });
   }
