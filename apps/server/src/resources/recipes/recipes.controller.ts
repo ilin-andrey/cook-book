@@ -23,32 +23,26 @@ export class RecipesController {
   @UsePipes(new JoiValidationPipe(CreateRecipeSchema))
   async create(@Body() data: CreateRecipeDto) {
     const ret = await this.svc.create(data);
-    return { success: true, data: ret };
+    return { data: ret };
   }
 
   @Get()
   async findAll() {
     const data = await this.svc.findAll();
-    return {
-      success: true,
-      data,
-    };
+    return { data };
   }
 
   @Get(":id")
   async findOne(@Param("id") id: number) {
     const data = await this.svc.findOne(id);
-    return {
-      success: true,
-      data,
-    };
+    return { data };
   }
 
   @Put(":id")
   @UsePipes(new JoiValidationPipe(UpdateRecipeSchema))
   async update(@Param("id") id: number, @Body() data: UpdateRecipeDto) {
     const ret = await this.svc.update({ where: { id }, data });
-    return { success: true, data: ret };
+    return { data: ret };
   }
 
   @Delete(":id")
