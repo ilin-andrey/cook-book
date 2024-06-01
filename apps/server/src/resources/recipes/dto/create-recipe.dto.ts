@@ -5,6 +5,8 @@ export class CreateRecipeDto {
   public complexity: number;
   public description: string;
   public dishId: number;
+  public calories: number;
+  public weight: number;
 }
 
 export const CreateRecipeSchema = Joi.object({
@@ -14,6 +16,8 @@ export const CreateRecipeSchema = Joi.object({
     })
     .required(),
   duration: Joi.number().integer().positive().required(),
+  calories: Joi.number().integer().positive(),
+  weight: Joi.number().integer().positive(),
   complexity: Joi.number().integer().min(1).max(5).required(),
   description: Joi.string().empty(""),
 });

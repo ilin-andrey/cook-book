@@ -83,11 +83,11 @@ model Ingredient {
 
 model Recipe {
   id          Int       @id @default(autoincrement())
-  duration    Int
-  complexity  Int
+  duration    Int // in seconds
+  complexity  Int // 1-5 pro
   portions    Int       @default(1)
   calories    Int
-  weight      Float
+  weight      Int // in grams
   description String
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
