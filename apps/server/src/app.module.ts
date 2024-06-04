@@ -8,6 +8,7 @@ import { DishesModule } from "~/resources/dishes/dishes.module";
 import { IngredientsModule } from "~/resources/ingredients/ingredients.module";
 import { RecipesModule } from "~/resources/recipes/recipes.module";
 import { UsersModule } from "~/resources/users/users.module";
+import { PlanModule } from "./resources/plan/plan.module";
 
 import { NODE_ENV } from "../config/app";
 import { AppController } from "./app.controller";
@@ -36,6 +37,7 @@ const validationSchema = Joi.object({
     DishesModule,
     IngredientsModule,
     RecipesModule,
+    PlanModule,
     AuthModule,
     UsersModule,
   ],
