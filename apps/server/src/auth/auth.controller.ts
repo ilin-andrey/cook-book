@@ -60,6 +60,7 @@ export class AuthController {
     return this.storeTokensInCookies(res, tokens).sendStatus(HttpStatus.OK);
   }
 
+  @Public() // <~ This is a custom decorator that allows access to the route without a valid access token
   @UseGuards(RefreshTokenGuard)
   @Post("logout")
   logout(@Req() req: RequestWithUser, @Res() res: Response) {
@@ -73,6 +74,7 @@ export class AuthController {
     return this.clearTokensFromCookies(res).sendStatus(HttpStatus.OK);
   }
 
+  @Public() // <~ This is a custom decorator that allows access to the route without a valid access token
   @UseGuards(RefreshTokenGuard)
   @Post("refresh")
   async refresh(@Req() req: RequestWithUser, @Res() res: Response) {
