@@ -2,7 +2,6 @@ import {
   BadRequestException,
   Body,
   Controller,
-  HttpCode,
   HttpStatus,
   InternalServerErrorException,
   Post,
@@ -12,7 +11,7 @@ import {
   UseGuards,
   UsePipes,
 } from "@nestjs/common";
-import { Response } from "express";
+import { Response, type CookieOptions } from "express";
 
 import { JoiValidationPipe } from "~/pipes/validation.pipe";
 
@@ -25,6 +24,12 @@ import { RefreshTokenGuard } from "./guards/jwt-auth.guard";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
 import { RequestWithUser } from "./interfaces/request.interface";
 
+const COOKIES_SETTINGS: CookieOptions = {
+  httpOnly: true,
+  secure: true,
+  sameSite: "lax",
+};
+
 @Controller("auth")
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -35,13 +40,13 @@ export class AuthController {
   async register(@Body() registerDto: RegisterDto, @Res() res: Response) {
     const tokens = await this.authService.register(registerDto);
 
-    this.storeTokensInCookies(res, tokens);
-    res.json({ status: "ok" });
+    return this.storeTokensInCookies(res, tokens).sendStatus(
+      HttpStatus.CREATED,
+    );
   }
 
   @Public()
   @UseGuards(LocalAuthGuard)
-  @HttpCode(HttpStatus.OK)
   @Post("login")
   @UsePipes(new JoiValidationPipe(LoginSchema))
   async login(@Req() req: RequestWithUser, @Res() res: Response) {
@@ -52,10 +57,9 @@ export class AuthController {
     const { userId, email } = req.user;
     const tokens = await this.authService.login(userId, email);
 
-    this.storeTokensInCookies(res, tokens).json({ status: "ok" });
+    return this.storeTokensInCookies(res, tokens).sendStatus(HttpStatus.OK);
   }
 
-  @Public()
   @UseGuards(RefreshTokenGuard)
   @Post("logout")
   logout(@Req() req: RequestWithUser, @Res() res: Response) {
@@ -66,10 +70,9 @@ export class AuthController {
       throw new InternalServerErrorException();
     }
 
-    return this.clearTokensFromCookies(res).json({ status: "ok" });
+    return this.clearTokensFromCookies(res).sendStatus(HttpStatus.OK);
   }
 
-  @Public()
   @UseGuards(RefreshTokenGuard)
   @Post("refresh")
   async refresh(@Req() req: RequestWithUser, @Res() res: Response) {
@@ -78,22 +81,31 @@ export class AuthController {
     }
 
     const { userId, refreshToken } = req.user;
-    const accessToken = await this.authService.refreshAccessToken(
-      userId,
-      refreshToken as string,
-    );
 
-    this.storeAccessTokenInCookies(res, accessToken).json({
-      status: "ok",
-    });
+    try {
+      const accessToken = await this.authService.refreshAccessToken(
+        userId,
+        refreshToken as string,
+      );
+
+      return this.storeAccessTokenInCookies(res, accessToken).sendStatus(
+        HttpStatus.OK,
+      );
+    } catch (err) {
+      if (err instanceof UnauthorizedException) {
+        return this.clearTokensFromCookies(res).sendStatus(
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+
+      return res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   storeAccessTokenInCookies(res: Response, accessToken: string) {
     return res.cookie(ACCESS_TOKEN_COOKIE, accessToken, {
+      ...COOKIES_SETTINGS,
       maxAge: this.authService.getAccessTokenExpTime() * 1000,
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
     });
   }
 
@@ -103,10 +115,8 @@ export class AuthController {
   ) {
     this.storeAccessTokenInCookies(res, tokens.accessToken);
     res.cookie(REFRESH_TOKEN_COOKIE, tokens.refreshToken, {
+      ...COOKIES_SETTINGS,
       maxAge: this.authService.getRefreshTokenExpTime() * 1000,
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
     });
 
     return res;

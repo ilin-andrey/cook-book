@@ -45,6 +45,7 @@ model Session {
   id               Int       @id @default(autoincrement())
   userId           Int       @map("user_id")
   refreshTokenHash String    @map("refresh_token_hash")
+  expiredAt        DateTime  @map("expired_at") @db.Timestamptz(6)
   createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt        DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
 

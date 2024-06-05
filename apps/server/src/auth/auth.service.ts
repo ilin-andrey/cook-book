@@ -1,8 +1,8 @@
 import {
   BadRequestException,
-  ForbiddenException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
@@ -64,13 +64,7 @@ export class AuthService {
     }
 
     const tokens = await this.getJwtTokens(newUser.id, newUser.email);
-
-    const hashedToken = await bcrypt.hash(tokens.refreshToken, 10);
-
-    const session = await this.usersService.createSession({
-      userId: newUser.id,
-      refreshToken: hashedToken,
-    });
+    const session = await this.createSession(newUser.id, tokens.refreshToken);
 
     if (!session) {
       throw new InternalServerErrorException();
@@ -94,7 +88,7 @@ export class AuthService {
     );
 
     if (matched) {
-      await this.usersService.removeSession({ id: matched?.id });
+      await this.usersService.removeSession({ id: matched.id });
       return true;
     }
 
@@ -110,7 +104,12 @@ export class AuthService {
     );
 
     if (!user || !matched) {
-      throw new ForbiddenException("Access Denied");
+      throw new UnauthorizedException("Access Denied");
+    }
+
+    if (matched.expiredAt < new Date()) {
+      await this.usersService.removeSession({ id: matched.id });
+      throw new UnauthorizedException("Access Denied");
     }
 
     return await this.getAccessToken(user.id, user.email);
@@ -122,6 +121,7 @@ export class AuthService {
     return await this.usersService.createSession({
       userId,
       refreshToken: hashed,
+      expiredAt: new Date(Date.now() + this.getRefreshTokenExpTime() * 1000),
     });
   }
 
@@ -137,7 +137,7 @@ export class AuthService {
         email,
       },
       {
-        secret: secret,
+        secret,
         expiresIn: exp,
       },
     );
@@ -158,7 +158,7 @@ export class AuthService {
   }
 
   async getAccessToken(userId: number, email: string) {
-    return this.getJwtToken(
+    return await this.getJwtToken(
       userId,
       email,
       this.configService.get<string>("JWT_ACCESS_TOKEN_SECRET"),

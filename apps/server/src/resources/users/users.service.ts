@@ -15,19 +15,24 @@ export class UsersService {
     });
   }
 
-  async createUser(data: CreateUserDto): Promise<User> {
-    return this.prisma.user.create({ data });
+  async createUser(payload: CreateUserDto): Promise<User> {
+    return this.prisma.user.create({ data: payload });
   }
 
   async findUserSessions(where: Prisma.SessionWhereInput): Promise<Session[]> {
     return this.prisma.session.findMany({ where });
   }
 
-  async createSession(data: { userId: number; refreshToken: string }) {
+  async createSession(payload: {
+    userId: number;
+    refreshToken: string;
+    expiredAt: Date;
+  }) {
     return this.prisma.session.create({
       data: {
-        userId: data.userId,
-        refreshTokenHash: data.refreshToken,
+        userId: payload.userId,
+        refreshTokenHash: payload.refreshToken,
+        expiredAt: payload.expiredAt,
       },
     });
   }
