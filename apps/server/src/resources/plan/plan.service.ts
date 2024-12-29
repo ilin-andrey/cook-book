@@ -40,7 +40,7 @@ export class PlanService {
     people: number;
     caloriesPerDay: number;
     mealTypes: MealType[];
-  }): Promise<any> {
+  }): Promise<unknown> {
     const meals: RecipeWithDish[] = [];
     const restCaloriesPerDay = Array.from(
       { length: days },
@@ -53,7 +53,7 @@ export class PlanService {
       },
       {},
     );
-    const dishesPerDay: Array<Record<string, any>[]> = Array.from(
+    const dishesPerDay: Array<Record<string, unknown>[]> = Array.from(
       { length: days },
       () => [],
     );
